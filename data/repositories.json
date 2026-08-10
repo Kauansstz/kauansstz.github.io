@@ -1,0 +1,24 @@
+{
+    "updated_at": "2026-08-09T20:00:00Z",
+    "username": "kauansstz",
+    "repositories": [
+        {
+            "id": 1,
+            "name": "RustVault",
+            "language": "Rust",
+            "description": "Projeto desenvolvido em Rust.",
+            "url": "https://github.com/kauansstz/RustVault",
+            "readme_url": "https://github.com/kauansstz/RustVault#readme",
+            "has_readme": true
+        },
+        {
+            "id": 2,
+            "name": "Projex",
+            "language": "Java",
+            "description": "Sistema desenvolvido em Java.",
+            "url": "https://github.com/kauansstz/Projex",
+            "readme_url": null,
+            "has_readme": false
+        }
+    ]
+}
