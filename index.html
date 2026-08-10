@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>kauansstz@portfolio:~$</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+
+            background: #000;
+
+            color: #00ff66;
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            overflow: hidden;
+        }
+
+        .terminal {
+
+            width: 100%;
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-header {
+
+            height: 42px;
+
+            background: #1a1a1a;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 15px;
+
+            border-bottom:
+                1px solid #333;
+        }
+
+        .buttons {
+
+            display: flex;
+
+            gap: 8px;
+        }
+
+        .button {
+
+            width: 12px;
+            height: 12px;
+
+            border-radius: 50%;
+
+            display: inline-block;
+        }
+
+        .red {
+            background: #ff5f56;
+        }
+
+        .yellow {
+            background: #ffbd2e;
+        }
+
+        .green {
+            background: #27c93f;
+        }
+
+        .terminal-title {
+
+            margin-left: 20px;
+
+            color: #ccc;
+
+            font-size: 13px;
+        }
+
+        .terminal-body {
+
+            flex: 1;
+
+            padding: 25px;
+
+            overflow-y: auto;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            cursor: text;
+        }
+
+        .line {
+            white-space: pre-wrap;
+        }
+
+        .command-line {
+
+            display: flex;
+
+            align-items: center;
+
+            margin-top: 5px;
+        }
+
+        .prompt {
+
+            color: #00ff66;
+
+            margin-right: 8px;
+
+            white-space: nowrap;
+        }
+
+        #command {
+
+            flex: 1;
+
+            background: transparent;
+
+            border: none;
+
+            outline: none;
+
+            color: #00ff66;
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            font-size: 15px;
+        }
+
+        .white {
+            color: #fff;
+        }
+
+        .cyan {
+            color: #00ffff;
+        }
+
+        .yellow-text {
+            color: #ffff00;
+        }
+
+        .error {
+            color: #ff5555;
+        }
+
+        .cursor {
+
+            display: inline-block;
+
+            width: 8px;
+            height: 17px;
+
+            background: #00ff66;
+
+            animation:
+                blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .terminal-body {
+
+                padding: 15px;
+
+                font-size: 13px;
+            }
+
+            #command {
+
+                font-size: 13px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="terminal">
+
+    <div class="terminal-header">
+
+        <div class="buttons">
+
+            <span class="button red"></span>
+
+            <span class="button yellow"></span>
+
+            <span class="button green"></span>
+
+        </div>
+
+        <div class="terminal-title">
+
+            kauansstz@portfolio: ~
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="terminal-body"
+        id="terminal"
+        onclick="focusInput()"
+    >
+
+        <div class="line">
+
+            <span class="cyan">
+                Welcome to Kauan's Terminal
+            </span>
+
+        </div>
+
+        <div class="line">
+
+            Type
+            <span class="white">help</span>
+            to see available commands.
+
+        </div>
+
+        <br>
+
+
+        <div class="command-line">
+
+            <span class="prompt">
+                kauansstz@portfolio:~$
+            </span>
+
+            <input
+                id="command"
+                type="text"
+                autocomplete="off"
+                autofocus
+            >
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const terminal =
+        document.getElementById("terminal");
+
+    const input =
+        document.getElementById("command");
+
+
+    function focusInput() {
+
+        input.focus();
+
+    }
+
+
+    function print(text, className = "") {
+
+        const line =
+            document.createElement("div");
+
+        line.className =
+            `line ${className}`;
+
+        line.innerHTML =
+            text;
+
+        terminal.insertBefore(
+            line,
+            terminal.lastElementChild
+        );
+
+    }
+
+
+    function newLine() {
+
+        print("");
+
+    }
+
+
+    function executeCommand(command) {
+
+        const cmd =
+            command
+                .trim()
+                .toLowerCase();
+
+
+        print(
+            `<span class="prompt">
+                kauansstz@portfolio:~$
+            </span> ${command}`
+        );
+
+
+        switch (cmd) {
+
+
+            case "help":
+
+                print(
+`<span class="cyan">
+Available commands:
+
+about       → Quem é o Kauan
+whoami      → Informações pessoais
+skills      → Tecnologias
+projects    → Meus projetos
+github      → Meu GitHub
+contact     → Contato
+clear       → Limpar terminal
+help        → Mostrar comandos
+</span>`
+                );
+
+                break;
+
+
+            case "about":
+
+                print(
+`<span class="white">
+
+Kauan dos Santos de Souza
+
+Age...............: 22
+Developer since...: 18
+Role..............: Full-Stack Engineer
+
+I build software, APIs, web applications,
+automations and integrations.
+
+</span>`
+                );
+
+                break;
+
+
+            case "whoami":
+
+                print(
+`<span class="yellow-text">
+
+Kauan dos Santos de Souza
+Full-Stack Engineer
+Developer since 18
+
+</span>`
+                );
+
+                break;
+
+
+            case "skills":
+
+                print(
+`<span class="cyan">
+
+LANGUAGES
+├── Rust
+├── Python
+├── Java
+├── SQL
+├── HTML
+└── CSS
+
+BACKEND
+├── Django
+├── Django REST Framework
+├── Flask
+└── Spring Boot
+
+DATABASES
+├── SQL Server
+├── Oracle
+└── MySQL
+
+DEVOPS
+├── Docker
+├── Docker Compose
+└── Kubernetes
+
+</span>`
+                );
+
+                break;
+
+
+            case "projects":
+
+                print(
+`<span class="white">
+
+Fetching repositories...
+
+[01] Rust API Tester
+     Language: Rust
+
+[02] Python Automation
+     Language: Python
+
+[03] Django Application
+     Language: Python
+
+[04] Java Spring API
+     Language: Java
+
+</span>`
+                );
+
+                break;
+
+
+            case "github":
+
+                print(
+`<span class="cyan">
+
+Opening GitHub...
+
+</span>`
+                );
+
+                window.open(
+                    "https://github.com/kauansstz",
+                    "_blank"
+                );
+
+                break;
+
+
+            case "contact":
+
+                print(
+`<span class="white">
+
+GitHub:
+https://github.com/kauansstz
+
+LinkedIn:
+[adicione seu LinkedIn]
+
+Email:
+[adicione seu email]
+
+</span>`
+                );
+
+                break;
+
+
+            case "clear":
+
+                const lines =
+                    terminal.querySelectorAll(
+                        ".line"
+                    );
+
+                lines.forEach(
+                    line => line.remove()
+                );
+
+                break;
+
+
+            case "":
+
+                break;
+
+
+            default:
+
+                print(
+`<span class="error">
+Command not found: ${command}
+
+Type "help" to see available commands.
+</span>`
+                );
+
+        }
+
+    }
+
+
+    input.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                const command =
+                    input.value;
+
+                input.value = "";
+
+                executeCommand(
+                    command
+                );
+
+                terminal.scrollTop =
+                    terminal.scrollHeight;
+            }
+
+        }
+    );
+
+
+    focusInput();
+
+</script>
+
+</body>
+
+</html>
