@@ -960,56 +960,116 @@
 
     async function loadRepositories() {
 
-        if (isLoadingRepositories) {
+    if (isLoadingRepositories) {
+        return;
+    }
 
-            return;
+    isLoadingRepositories = true;
 
-        }
+    print(
+        `<span class="gray">
+[GitHub] Connecting to API...
+</span>`
+    );
 
+    try {
 
-        isLoadingRepositories = true;
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}?per_page=100&sort=updated`
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    `GitHub API returned ${response.status}`
-                );
-
+        const response = await fetch(
+            `${API_URL}?per_page=100&sort=updated`,
+            {
+                method: "GET",
+                headers: {
+                    "Accept": "application/vnd.github+json"
+                },
+                cache: "no-store"
             }
+        );
+
+        console.log(
+            "[GitHub API]",
+            response.status,
+            response.statusText
+        );
 
 
-            repositories =
-                await response.json();
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "[GitHub API ERROR]",
+                errorText
+            );
+
+            throw new Error(
+                `HTTP ${response.status} - ${response.statusText}`
+            );
+        }
 
 
-            repositories =
-                repositories.filter(
-                    repo => !repo.fork
-                );
+        const data =
+            await response.json();
 
 
-        } catch (error) {
+        if (!Array.isArray(data)) {
 
-            console.error(error);
-
-            repositories = [];
-
-        } finally {
-
-            isLoadingRepositories = false;
+            throw new Error(
+                "GitHub API returned an invalid response."
+            );
 
         }
+
+
+        repositories =
+            data.filter(
+                repo => !repo.fork
+            );
+
+
+        console.log(
+            "[GitHub] Repositories loaded:",
+            repositories
+        );
+
+
+        print(
+            `<span class="green-text">
+[GitHub] ✓ ${repositories.length} repositories loaded.
+</span>`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "[GitHub] Failed to load repositories:",
+            error
+        );
+
+
+        print(
+`<span class="red-text">
+[GitHub] ✗ Unable to retrieve repositories.
+
+Error:
+${escapeHTML(error.message)}
+
+Open F12 → Console to see more details.
+</span>`
+        );
+
+
+        repositories = [];
+
+
+    } finally {
+
+        isLoadingRepositories = false;
 
     }
+
+}
 
 
     /* =========================================================
